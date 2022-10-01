@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../schemas/comment");
 
+// /?comments/:_postId ??
 router.get("/comments/:_postId", async (req, res) => {
   const comments = await Comment.find();
 
@@ -18,7 +19,7 @@ router.get("/comments/:_postId", async (req, res) => {
     data: results,
   });
 });
-
+// /?comments/:_postId ??
 router.post("/comments/:_postId", async (req, res) => {
   const { commentsId, user, content, createdAt } = req.body;
 

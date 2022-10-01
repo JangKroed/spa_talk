@@ -7,7 +7,8 @@ router.get("/posts", async (req, res) => {
 
   const results = posts.map((post) => {
     return {
-      postsId: post.postsId,
+      id:post._id,
+      postId: post.postId,
       user: post.user,
       title: post.title,
       createdAt: post.createdAt,
@@ -20,12 +21,12 @@ router.get("/posts", async (req, res) => {
 });
 
 router.post("/posts", async (req, res) => {
-  const { postsId, user, password, title, createdAt } = req.body;
+  const { postId, user, password, title, createdAt } = req.body;
 
-  const posts = await Post.find({ postsId });
+  const posts = await Post.find({ postId });
 
   const createPosts = await Post.create({
-    postsId,
+    postId,
     user,
     password,
     title,
