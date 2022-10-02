@@ -31,7 +31,6 @@ router.get("/posts/:_postId", async (req, res) => {
       createdAt: post.createdAt,
     };
   });
-  console.log(results);
 
   const [detail] = results.filter((post) => post.postId == _postId);
 
@@ -51,6 +50,41 @@ router.post("/posts", async (req, res) => {
     createdAt,
   });
   res.send({ message: "게시글을 생성하였습니다." });
+});
+
+router.put("/posts/:_postId", async (req, res) => {
+  const { _postId } = req.params;
+  const { password, title, content } = req.body;
+  const putPost = await Post.find({ _id: _postId });
+
+  const [insertWord] = putPost.filter((post) => {
+    return {
+      password: post.password,
+    };
+  });
+
+  if (putPost.length && password == insertWord.password) {
+    await insertWord.updateOne({ postId: _postId, $set: { title, content } });
+    res.send({ message: "게시글을 수정하였습니다." });
+  } else res.status(400).json({ errorMessge: "비밀번호가 맞지 않습니다" });
+});
+
+router.delete("/posts/:_postId", async (req, res) => {
+  const { _postId } = req.params;
+  const { password } = req.body;
+
+  const delPost = await Post.find({ _id: _postId });
+  const insertWord = delPost.filter((post) => {
+    return {
+      password: post.password,
+    };
+  });
+  console.log(insertWord);
+
+  if (delPost.length && password == insertWord[0].password) {
+    await Post.deleteOne({ _postId });
+    res.send({ message: "게시글을 삭제하였습니다." });
+  } else res.status(400).json({ errorMessge: "비밀번호가 맞지 않습니다" });
 });
 
 module.exports = router;
