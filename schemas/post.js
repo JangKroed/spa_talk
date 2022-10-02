@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const postsSchema = new mongoose.Schema({
-  postId: {
+  _postId: {
     type: String,
   },
   user: {
@@ -13,8 +13,12 @@ const postsSchema = new mongoose.Schema({
   title: {
     type: String,
   },
-  createdAt: {
+  content: {
     type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
