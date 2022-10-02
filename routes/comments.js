@@ -3,12 +3,12 @@ const router = express.Router();
 const Comment = require("../schemas/comment");
 
 // /?comments/:_postId ??
-router.get("/comments/:_postId", async (req, res) => {
+router.get("/comments", async (req, res) => {
   const comments = await Comment.find();
 
   const results = comments.map((ment) => {
     return {
-      commentsId: ment.commentsId,
+      commentId: ment._id,
       user: ment.user,
       content: ment.content,
       createdAt: ment.createdAt,
@@ -20,19 +20,17 @@ router.get("/comments/:_postId", async (req, res) => {
   });
 });
 // /?comments/:_postId ??
-router.post("/comments/:_postId", async (req, res) => {
-  const { commentsId, user, content, createdAt } = req.body;
+router.post("/comments", async (req, res) => {
+  const { user, password, content, createdAt } = req.body;
 
-  const comments = await Comment.find({ commentsId });
-
-  const createComments = await Comment.create({
-    commentsId,
+  await Comment.create({
     user,
+    password,
     content,
     createdAt,
   });
 
-  res.json({ comments: createComments });
+  res.send({ message: "댓글을 생성하였습니다." });
 });
 
 module.exports = router;
