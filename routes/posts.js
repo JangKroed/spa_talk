@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../schemas/post");
 
+/**
+ * 전체 게시글 목록 조회
+ * 
+ * 게시글ID, 작성자, 제목, 작성날짜 (내림차순)
+ */
 router.get("/posts", async (req, res) => {
   const posts = await Post.find().sort({ createdAt: -1 });
 
@@ -19,6 +24,11 @@ router.get("/posts", async (req, res) => {
   });
 });
 
+/**
+ * 게시글 상세 조회
+ * 
+ * 게시글ID, 작성자, 제목, 내용, 작성날짜
+ */
 router.get("/posts/:_postId", async (req, res) => {
   const { _postId } = req.params;
   const posts = await Post.find();
@@ -39,6 +49,12 @@ router.get("/posts/:_postId", async (req, res) => {
   });
 });
 
+/**
+ * 게시글 작성
+ * 
+ * 작성자, 비밀번호, 제목, 내용
+ * + 작성날짜도 DB에 저장
+ */
 router.post("/posts", async (req, res) => {
   const { user, password, title, content, createdAt } = req.body;
   await Post.create({
@@ -51,6 +67,11 @@ router.post("/posts", async (req, res) => {
   res.send({ message: "게시글을 생성하였습니다." });
 });
 
+/**
+ * 게시글 수정
+ * 
+ * 비밀번호가 동일할 경우만 수정
+ */
 router.put("/posts/:_postId", async (req, res) => {
   const { _postId } = req.params;
   const { password, title, content } = req.body;
@@ -68,6 +89,11 @@ router.put("/posts/:_postId", async (req, res) => {
   } else res.status(400).json({ errorMessge: "비밀번호가 맞지 않습니다" });
 });
 
+/**
+ * 게시글 삭제
+ * 
+ * 비밀번호가 동일할경우만 삭제
+ */
 router.delete("/posts/:_postId", async (req, res) => {
   const { _postId } = req.params;
   const { password } = req.body;
